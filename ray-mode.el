@@ -82,7 +82,8 @@
     (define-key map (kbd "C-c yl") 'ray-mode-lint)
     (define-key map (kbd "C-c yf") 'ray-mode-fix-lint)
     (define-key map (kbd "C-c yp") 'ray-mode-publish)
-    (define-key map (kbd "C-c ys") 'ray-mode-stop))
+    (define-key map (kbd "C-c ys") 'ray-mode-stop)
+    map)
   "Keymap for `ray-mode`.")
 
 (easy-menu-define ray--mode-menu
