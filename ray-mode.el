@@ -54,6 +54,7 @@
 ;;; Code:
 
 (require 'compile)
+(require 'easymenu)
 
 (defgroup ray-mode nil
   "A minor mode for building, running & validating Raycast extensions."
@@ -69,50 +70,60 @@
   :type 'string
   :group 'ray-mode)
 
+(defcustom ray-mode-use-menu t
+  "If non-nil enable lighter menu."
+  :type 'boolean
+  :group 'ray-mode)
+
 (defvar ray-mode-map
-  (make-sparse-keymap)
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "C-c yb") 'ray-mode-build)
+    (define-key map (kbd "C-c yd") 'ray-mode-develop)
+    (define-key map (kbd "C-c yl") 'ray-mode-lint)
+    (define-key map (kbd "C-c yf") 'ray-mode-fix-lint)
+    (define-key map (kbd "C-c yp") 'ray-mode-publish)
+    (define-key map (kbd "C-c ys") 'ray-mode-stop))
   "Keymap for `ray-mode`.")
 
-(define-key ray-mode-map
-  (kbd "C-c yd") 'ray-mode-develop)
-
-(define-key ray-mode-map
-  (kbd "C-c yl") 'ray-mode-lint)
-
-(define-key ray-mode-map
-  (kbd "C-c yf") 'ray-mode-fix-lint)
-
-(define-key ray-mode-map
-  (kbd "C-c yp") 'ray-mode-publish)
-
-(define-key ray-mode-map
-  (kbd "C-c ys") 'ray-mode-stop)
-
-;; TD: Check if compilation is running 😱
-;; Use a custom buffer name?
+(easy-menu-define ray--mode-menu
+  ray-mode-map
+  "Menu used when `ray-mode' is active."
+  '("Ray" :visible ray-mode-use-menu
+    "----"
+    ["Develop..." ray-mode-develop
+     :help "Start the extension in development mode and watch for changes"]
+    ["Build..." ray-mode-build
+     :help "Build the extension"]
+    ["Lint..." ray-mode-lint
+     :help "Validate the extension manifest and metadata, and lint its source code"]
+    ["Fix lint..." ray-mode-fix-lint
+     :help "Attempt to fix any validation or linter errors"]
+    ["Publish..." ray-mode-publish
+     :help "Build and publish the extension for distribution. Requires a Team account."]
+    "----"))
 
 (defun ray-mode-build()
-  "Run `npm run build`."
+  "Build the extension."
   (interactive)
   (ray-mode--compile "build"))
 
 (defun ray-mode-develop()
-  "Run `npm run dev`."
+  "Start the extension in development mode."
   (interactive)
   (ray-mode--compile "dev" ray-mode-target))
 
 (defun ray-mode-lint()
-  "Run `npm run lint`."
+  "Validate the extension manifest and metadata, and lint its source code."
   (interactive)
   (ray-mode--compile "lint"))
 
 (defun ray-mode-fix-lint()
-  "Run `npm run fix-lint`."
+  "Attempt to fix any validation or linter errors."
   (interactive)
   (ray-mode--compile "fix-lint"))
 
 (defun ray-mode-publish()
-  "Run `npm run publish`."
+  "Build and publish the extension for distribution - requires a Team account."
   (interactive)
   (ray-mode--compile "publish"))
 
