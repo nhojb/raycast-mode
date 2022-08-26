@@ -1,0 +1,14 @@
+### macOS ###
+*.DS_Store
+
+### Elisp ###
+*.elc
+
+# Packaging
+.cask
+
+# Backup files
+*~
+
+# Markdown
+README.html
