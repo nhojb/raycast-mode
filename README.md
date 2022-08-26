@@ -6,6 +6,8 @@ A minor mode for developers building [extensions](https://developers.raycast.com
 
 Develop, lint, build and publish your Raycast extensions from Emacs.
 
+Note: The `publish` command requires a Team account. See https://www.raycast.com/pricing.
+
 ## Installation
 
 In your `init.el`
