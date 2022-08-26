@@ -44,7 +44,7 @@
 ;;
 ;; In your `init.el`
 ;;
-;; (require 'ray-mode))
+;; (require 'ray-mode)
 ;;
 ;; or with `use-package`:
 ;;
@@ -87,6 +87,9 @@
 
 (define-key ray-mode-map
   (kbd "C-c ys") 'ray-mode-stop)
+
+;; TD: Check if compilation is running 😱
+;; Use a custom buffer name?
 
 (defun ray-mode-build()
   "Run `npm run build`."

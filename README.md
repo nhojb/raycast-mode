@@ -12,7 +12,7 @@ In your `init.el`
 
 ```elisp
 ;; Not necessary if using MELPA package
-(require 'ray-mode))
+(require 'ray-mode)
 ```
 
 or with `use-package`:
