@@ -101,45 +101,60 @@
      :help "Attempt to fix any validation or linter errors"]
     ["Publish..." ray-mode-publish
      :help "Build and publish the extension for distribution. Requires a Team account."]
+    "----"
+    ["Install..." ray-mode-install
+     :help "Run npm install"]
+    ["Update..." ray-mode-update
+     :help "Run npm update"]
     "----"))
 
 (defun ray-mode-build()
   "Build the extension."
   (interactive)
-  (ray-mode--compile "build"))
+  (ray-mode--run "build"))
 
 (defun ray-mode-develop()
   "Start the extension in development mode."
   (interactive)
-  (ray-mode--compile "dev" ray-mode-target))
+  (ray-mode--run "dev" ray-mode-target))
 
 (defun ray-mode-lint()
   "Validate the extension manifest and metadata, and lint its source code."
   (interactive)
-  (ray-mode--compile "lint"))
+  (ray-mode--run "lint"))
 
 (defun ray-mode-fix-lint()
   "Attempt to fix any validation or linter errors."
   (interactive)
-  (ray-mode--compile "fix-lint"))
+  (ray-mode--run "fix-lint"))
 
 (defun ray-mode-publish()
   "Build and publish the extension for distribution - requires a Team account."
   (interactive)
-  (ray-mode--compile "publish"))
+  (ray-mode--run "publish"))
 
 (defun ray-mode-stop()
   "Stop development."
   (interactive)
   (kill-compilation))
 
+(defun ray-mode-install()
+  "Run npm install."
+  (interactive)
+  (ray-mode--npm "install"))
+
+(defun ray-mode-update()
+  "Run npm update."
+  (interactive)
+  (ray-mode--npm "update"))
+
 (defun ray-mode--extension-directory()
   "Get the current extension's root directory."
   (or (locate-dominating-file default-directory "package.json")
       default-directory))
 
-(defun ray-mode--compile (command &optional target)
-  "Run COMMAND for the current extension and TARGET."
+(defun ray-mode--run (command &optional target)
+  "Run ray COMMAND for the current extension and TARGET."
   (let ((default-directory (ray-mode--extension-directory))
         (ray-command (cond
                       ((and ray-mode-emoji target)
@@ -150,6 +165,11 @@
                        (format "npm run %s -- --target %s" command target))
                       (t (format "npm run %s" command)))))
     (compile ray-command)))
+
+(defun ray-mode--npm (command)
+  "Run npm COMMAND for the current extension."
+  (let ((default-directory (ray-mode--extension-directory)))
+    (compile (format "npm %s" command))))
 
 ;;;###autoload
 (define-minor-mode ray-mode
