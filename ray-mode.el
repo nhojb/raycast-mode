@@ -40,6 +40,8 @@
 ;;
 ;; Develop, lint, build and publish your Raycast extensions from Emacs.
 ;;
+;; For more information visit: https://developers.raycast.com
+;;
 ;; Installation:
 ;;
 ;; In your `init.el`
