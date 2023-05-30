@@ -89,6 +89,9 @@
     "----"
     ["Develop..." raycast-develop
      :help "Start the extension in development mode and watch for changes"]
+    ["Stop..." raycast-stop
+     :visible (not (eq compilation-in-progress nil))
+     :help "Stop the extension development mode"]
     ["Build..." raycast-build
      :help "Build the extension"]
     ["Lint..." raycast-lint
