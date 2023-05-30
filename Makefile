@@ -11,7 +11,7 @@ CASK_EMACS := $(EMACS)
 export EMACS
 export CASK_EMACS
 
-SRCS := ray-mode.el
+SRCS := raycast-mode.el
 OBJS := $(SRCS:.el=.elc)
 
 .PHONY : all

@@ -1,6 +1,6 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-# ray-mode
+# raycast-mode
 
 A minor mode for developers building [extensions](https://developers.raycast.com) for [Raycast](https://www.raycast.com).
 
@@ -12,20 +12,20 @@ In your `init.el`
 
 ```elisp
 ;; Not necessary if using MELPA package
-(require 'ray-mode)
+(require 'raycast-mode)
 ```
 
 or with `use-package`:
 
 ```elisp
-(use-package ray-mode)
+(use-package raycast-mode)
 ```
 
-Then enable `ray-mode` in your typescript, javascript or web-mode hooks.
+Then enable `raycast-mode` in your typescript, javascript or web-mode hooks.
 
 ## Configuration
 
-- `ray-mode-emoji` enables emoji in ray output. It's enabled by default.
+- `raycast-mode-emoji` enables emoji in ray output. It's enabled by default.
 
 ## FAQ
 

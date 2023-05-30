@@ -1,9 +1,9 @@
-;;; ray-mode.el --- Develop Raycast Extensions -*- lexical-binding: t; -*-
+;;; raycast-mode.el --- Develop Raycast Extensions -*- lexical-binding: t; -*-
 
 ;; Copyright (c) 2022 John Buckley <nhoj.buckley@gmail.com>
 
 ;; Author: John Buckley <nhoj.buckley@gmail.com>
-;; URL: https://github.com/nhojb/ray-mode
+;; URL: https://github.com/nhojb/raycast-mode
 ;; Version: 1.0
 ;; Keywords: convenience, languages, tools
 ;; Package-Requires: ((emacs "26.1"))
@@ -46,11 +46,11 @@
 ;;
 ;; In your `init.el`
 ;;
-;; (require 'ray-mode)
+;; (require 'raycast-mode)
 ;;
 ;; or with `use-package`:
 ;;
-;; (use-package ray-mode)
+;; (use-package raycast-mode)
 ;;
 
 ;;; Code:
@@ -58,128 +58,122 @@
 (require 'compile)
 (require 'easymenu)
 
-(defgroup ray-mode nil
+(defgroup raycast nil
   "A minor mode for building, running & validating Raycast extensions."
-  :group 'emacs)
+  :group 'emacs
+  :prefix "raycast-mode:")
 
-(defcustom ray-mode-emoji t
+(defcustom raycast-mode-emoji t
   "If non-nil enable emoji in ray output."
   :type 'boolean
-  :group 'ray-mode)
+  :group 'raycast)
 
-(defcustom ray-mode-target nil
+(defcustom raycast-mode-target nil
   "If non-nil use the specific ray target."
   :type 'string
-  :group 'ray-mode)
+  :group 'raycast)
 
-(defcustom ray-mode-use-menu t
+(defcustom raycast-mode-use-menu t
   "If non-nil enable lighter menu."
   :type 'boolean
-  :group 'ray-mode)
+  :group 'raycast)
 
-(defvar ray-mode-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "C-c yb") 'ray-mode-build)
-    (define-key map (kbd "C-c yd") 'ray-mode-develop)
-    (define-key map (kbd "C-c yl") 'ray-mode-lint)
-    (define-key map (kbd "C-c yf") 'ray-mode-fix-lint)
-    (define-key map (kbd "C-c yp") 'ray-mode-publish)
-    (define-key map (kbd "C-c ys") 'ray-mode-stop)
-    map)
-  "Keymap for `ray-mode`.")
+(defvar raycast-mode-map
+  (let ((map (make-sparse-keymap))) map)
+  "Keymap for `raycast-mode`.")
 
-(easy-menu-define ray--mode-menu
-  ray-mode-map
-  "Menu used when `ray-mode' is active."
-  '("Ray" :visible ray-mode-use-menu
+(easy-menu-define raycast--mode-menu
+  raycast-mode-map
+  "Menu used when `raycast-mode' is active."
+  '("Raycast" :visible raycast-mode-use-menu
     "----"
-    ["Develop..." ray-mode-develop
+    ["Develop..." raycast-develop
      :help "Start the extension in development mode and watch for changes"]
-    ["Build..." ray-mode-build
+    ["Build..." raycast-build
      :help "Build the extension"]
-    ["Lint..." ray-mode-lint
+    ["Lint..." raycast-lint
      :help "Validate the extension manifest and metadata, and lint its source code"]
-    ["Fix lint..." ray-mode-fix-lint
+    ["Fix lint..." raycast-fix-lint
      :help "Attempt to fix any validation or linter errors"]
-    ["Publish..." ray-mode-publish
+    ["Publish..." raycast-publish
      :help "Build and publish the extension for distribution. Requires a Team account."]
     "----"
-    ["Install..." ray-mode-install
+    ["Install..." raycast-install
      :help "Run npm install"]
-    ["Update..." ray-mode-update
+    ["Update..." raycast-update
      :help "Run npm update"]
     "----"))
 
-(defun ray-mode-build()
+(defun raycast-build()
   "Build the extension."
   (interactive)
-  (ray-mode--run "build"))
+  (raycast--run "build"))
 
-(defun ray-mode-develop()
+(defun raycast-develop()
   "Start the extension in development mode."
   (interactive)
-  (ray-mode--run "dev" ray-mode-target))
+  (raycast--run "dev" raycast-mode-target))
 
-(defun ray-mode-lint()
+(defun raycast-lint()
   "Validate the extension manifest and metadata, and lint its source code."
   (interactive)
-  (ray-mode--run "lint"))
+  (raycast--run "lint"))
 
-(defun ray-mode-fix-lint()
+(defun raycast-fix-lint()
   "Attempt to fix any validation or linter errors."
   (interactive)
-  (ray-mode--run "fix-lint"))
+  (raycast--run "fix-lint"))
 
-(defun ray-mode-publish()
+(defun raycast-publish()
   "Build and publish the extension for distribution - requires a Team account."
   (interactive)
-  (ray-mode--run "publish"))
+  (raycast--run "publish"))
 
-(defun ray-mode-stop()
+(defun raycast-stop()
   "Stop development."
   (interactive)
   (kill-compilation))
 
-(defun ray-mode-install()
+(defun raycast-install()
   "Run npm install."
   (interactive)
-  (ray-mode--npm "install"))
+  (raycast--npm "install"))
 
-(defun ray-mode-update()
+(defun raycast-update()
   "Run npm update."
   (interactive)
-  (ray-mode--npm "update"))
+  (raycast--npm "update"))
 
-(defun ray-mode--extension-directory()
+(defun raycast--extension-directory()
   "Get the current extension's root directory."
   (or (locate-dominating-file default-directory "package.json")
       default-directory))
 
-(defun ray-mode--run (command &optional target)
+(defun raycast--run (command &optional target)
   "Run ray COMMAND for the current extension and TARGET."
-  (let ((default-directory (ray-mode--extension-directory))
-        (ray-command (cond
-                      ((and ray-mode-emoji target)
+  (let ((default-directory (raycast--extension-directory))
+        (run-command (cond
+                      ((and raycast-mode-emoji target)
                        (format "npm run %s -- --emoji --target %s" command target))
-                      (ray-mode-emoji
+                      (raycast-mode-emoji
                        (format "npm run %s -- --emoji" command))
                       (target
                        (format "npm run %s -- --target %s" command target))
                       (t (format "npm run %s" command)))))
-    (compile ray-command)))
+    (compile run-command)))
 
-(defun ray-mode--npm (command)
+(defun raycast--npm (command)
   "Run npm COMMAND for the current extension."
-  (let ((default-directory (ray-mode--extension-directory)))
+  (let ((default-directory (raycast--extension-directory)))
     (compile (format "npm %s" command))))
 
 ;;;###autoload
-(define-minor-mode ray-mode
+(define-minor-mode raycast-mode
   "Minor mode for building Raycast extensions."
-  :lighter " ray"
-  :keymap ray-mode-map)
+  :lighter " raycast"
+  :keymap raycast-mode-map)
 
-(provide 'ray-mode)
+(provide 'raycast-mode)
 
-;;; ray-mode.el ends here
+;;; raycast-mode.el ends here
 

@@ -1,2 +1,2 @@
 (source melpa)
-(package-file "ray-mode.el")
+(package-file "raycast-mode.el")
