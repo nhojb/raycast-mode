@@ -107,47 +107,47 @@
      :help "Run npm update"]
     "----"))
 
-(defun raycast-build()
+(defun raycast-build ()
   "Build the extension."
   (interactive)
   (raycast--run "build"))
 
-(defun raycast-develop()
+(defun raycast-develop ()
   "Start the extension in development mode."
   (interactive)
   (raycast--run "dev" raycast-mode-target))
 
-(defun raycast-lint()
+(defun raycast-lint ()
   "Validate the extension manifest and metadata, and lint its source code."
   (interactive)
   (raycast--run "lint"))
 
-(defun raycast-fix-lint()
+(defun raycast-fix-lint ()
   "Attempt to fix any validation or linter errors."
   (interactive)
   (raycast--run "fix-lint"))
 
-(defun raycast-publish()
+(defun raycast-publish ()
   "Build and publish the extension for distribution - requires a Team account."
   (interactive)
   (raycast--run "publish"))
 
-(defun raycast-stop()
+(defun raycast-stop ()
   "Stop development."
   (interactive)
   (kill-compilation))
 
-(defun raycast-install()
+(defun raycast-install ()
   "Run npm install."
   (interactive)
   (raycast--npm "install"))
 
-(defun raycast-update()
+(defun raycast-update ()
   "Run npm update."
   (interactive)
   (raycast--npm "update"))
 
-(defun raycast--extension-directory()
+(defun raycast--extension-directory ()
   "Get the current extension's root directory."
   (or (locate-dominating-file default-directory "package.json")
       default-directory))
