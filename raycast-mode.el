@@ -157,12 +157,18 @@
   (let ((default-directory (raycast--extension-directory))
         (run-command (cond
                       ((and raycast-mode-emoji target)
-                       (format "npm run %s -- --emoji --target %s" command target))
+                       (format "npm run %s -- --emoji --target %s"
+                               (shell-quote-argument command)
+                               (shell-quote-argument target)))
                       (raycast-mode-emoji
-                       (format "npm run %s -- --emoji" command))
+                       (format "npm run %s -- --emoji"
+                               (shell-quote-argument command)))
                       (target
-                       (format "npm run %s -- --target %s" command target))
-                      (t (format "npm run %s" command)))))
+                       (format "npm run %s -- --target %s"
+                               (shell-quote-argument command)
+                               (shell-quote-argument target)))
+                      (t (format "npm run %s"
+                                 (shell-quote-argument command))))))
     (compile run-command)))
 
 (defun raycast--npm (command)
